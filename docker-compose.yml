@@ -43,3 +43,5 @@ services:
 
 networks:
   bb-net:
+    driver: bridge
+
