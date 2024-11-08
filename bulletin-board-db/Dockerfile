@@ -6,6 +6,7 @@ ENV ACCEPT_EULA=Y \
 WORKDIR /init
 COPY init-db.* ./
 
-RUN chmod +x ./init-db.sh
+RUN chmod +x ./init-db.sh || true
+
 
 CMD /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 30 && ./init-db.sh"
