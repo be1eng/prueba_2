@@ -1,13 +1,15 @@
-# Reemplaza la instalación de Node.js con una versión más reciente
 FROM node:20
 
-# Resto de las instrucciones
 WORKDIR /usr/src/app
+
+# Copia solo package.json y package-lock.json
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+
+# Instala dependencias
+RUN npm install
+
+# Copia el resto del código
 COPY . .
 
 EXPOSE 8080
 CMD [ "npm", "start" ]
-
-HEALTHCHECK --interval=5s CMD curl --fail http://localhost:8080 || exit 1  
