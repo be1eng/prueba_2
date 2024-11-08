@@ -1,46 +1,39 @@
 services:
-      
+   
   bb-db:
-    image: ${dockerId:-dockersamples}/bulletin-board-db:v5
-    build:
-      context: ./bulletin-board-db
+    image: be1en/bulletin-board-db:v5
     networks:
       - bb-net
 
   bb-app:
-    image: ${dockerId:-dockersamples}/bulletin-board-app:v5
-    build:
-      context: ./bulletin-board-app
+    image: be1en/bulletin-board-app:v5
+    networks:
+      - bb-net
     depends_on:
       - bb-db
     restart: on-failure
-    networks:
-      - bb-net
 
   bb-proxy:
-    image: ${dockerId:-dockersamples}/bulletin-board-proxy:v5
-    build:
-      context: ./bulletin-board-proxy
+    image: be1en/bulletin-board-proxy:v5
     ports:
       - "80:80"
     depends_on:
       - bb-app
     networks:
       - bb-net
+    deploy:
+      mode: replicated
+      replicas: 3
 
   bb-metrics:
-    image: ${dockerId:-dockersamples}/bulletin-board-metrics:v5
-    build:
-      context: ./bulletin-board-metrics
-    depends_on:
-      - bb-app
+    image: be1en/bulletin-board-metrics:v5
     networks:
       - bb-net
+    depends_on:
+      - bb-app
 
   bb-dashboard:
-    image: ${dockerId:-dockersamples}/bulletin-board-dashboard:v5
-    build:
-      context: ./bulletin-board-dashboard
+    image: be1en/bulletin-board-dashboard:v5
     ports:
       - "3000:3000"
     depends_on:
